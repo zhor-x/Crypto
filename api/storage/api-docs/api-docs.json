@@ -1,0 +1,862 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Crypto",
+        "description": "For Test Documentation",
+        "version": "1.0.0"
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "write bearer {token}"
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "User Auth"
+        },
+        {
+            "name": "News Source",
+            "description": "News source information"
+        },
+        {
+            "name": "News",
+            "description": "News source information"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "host": "localhost:8000",
+    "basePath": "/",
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send user uid and get jwt token.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "data": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NDE5MDE5NTQsImV4cCI6MTY0MjUwNjc1NCwibmJmIjoxNjQxOTAxOTU0LCJqdGkiOiJvb2c0QnJoOGJndEdrTHhDIiwic3ViIjoyMSwicHJ2IjoiODVjZjc1YzRlMDlhZDc0YjAzNzRiZmRlMTY0M2NlY2RlMGEwNzhmZSJ9.5LPpl2LvvGNzhln4glN8TMOHa9ruGnUHz3TK4xyY2vQ"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "bearer"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "example": 604800
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "email",
+                        "type": "string",
+                        "required": true,
+                        "description": "admin@crypto.com"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "password",
+                        "type": "string",
+                        "required": true,
+                        "description": "123456"
+                    }
+                ]
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "Refresh token",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Auth"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "Logout",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "You have successfully signed out"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "Auth info",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "data": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "admin"
+                                        },
+                                        "user_type": {
+                                            "type": "string",
+                                            "example": "admin"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "admin@crypto.com"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/source": {
+            "get": {
+                "tags": [
+                    "News Source"
+                ],
+                "summary": "Get all Sources",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "source": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "example": [
+                                            {
+                                                "id": 1,
+                                                "source": "Computerra.ru"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "source": "Lenta"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "News Source"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "source",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "summary": "Set new Source",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "News source created successfully"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/source/{id}": {
+            "put": {
+                "tags": [
+                    "News Source"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "source",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "summary": "Update Source",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "News source updated successfully"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "News Source"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "source",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "summary": "Update Source",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "News source updated successfully"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "News Source"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "summary": "Delete Source",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "Deleted",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "News source deleted successfully"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/news": {
+            "get": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Get News can group by theme,date,source",
+                "description": "",
+                "deprecated": false,
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "groupBy",
+                        "type": "string",
+                        "required": false,
+                        "description": "Litecoin,Bitcoin,Ripple,Dash,Ethereum or Date format Y-m-d or source  ex. Computerra.ru"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "description": {
+                                                "type": "string"
+                                            },
+                                            "image": {
+                                                "type": "string"
+                                            },
+                                            "content": {
+                                                "type": "string"
+                                            },
+                                            "published": {
+                                                "type": "string"
+                                            },
+                                            "source": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "example": [
+                                            {
+                                                "id": 1,
+                                                "title": "Принципиальные отличия платформ Ripple и Bitcoin",
+                                                "description": "Принципиальные отличия платформ Ripple и Bitcoin Ripple — цифровой актив и платежный протокол, позволяющий осуществлять международные платежи без посредников. Разработкой криптовалюты занимается компания Ripple Labs, которая также создала токен XRP. Данная пл…",
+                                                "image": "https://www.computerra.ru/wp-content/uploads/2022/02/pasted-image-0.png",
+                                                "content": "Ripple , . Ripple Labs, XRP. , . , , Bitcoin.\r\n XRP BTC\r\n , . XRP, OneCoin, . , , .\r\n 100 , 39 . 1 . , 5 . XRP , , .\r\n , . , :\r\n Ripple , , , .\r\n  https://changelly.com/ru/exchange/xrp/btc  , . , . C… [+157 chars]",
+                                                "published": "2022-02-09",
+                                                "source": "Computerra.ru"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "ASIC или видеокарта — что выбрать новичку для майнинга криптовалют",
+                                                "description": "Еще в начале прошлого года майнеры увеличили общий ежедневный доход до цифры в 52 млн $. В феврале эта цифра выросла уже до более 350 млн. Эксперты объясняют такой рост увеличением котировок криптовалют на рынке. За 2021 был отмечен рост стоимости альткоинов …",
+                                                "image": "https://www.computerra.ru/wp-content/uploads/2022/02/t2t-1000x1000-1.jpg",
+                                                "content": "52 $. 350 . . 2021 , Ethereum , 140% ( 1,7 $ ).\r\nAvito, 2021 , 2,5 , 4 .\r\nASIC- «» , , SHA-256:\r\n<ul><li>Litecoin;</li><li>Scrypt;</li><li>Cryptonight;</li><li>X11 .</li></ul> IBMM.\r\n Ethereum (Ethas… [+174 chars]",
+                                                "published": "2022-02-14",
+                                                "source": "Computerra.ru"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "title": "Принципиальные отличия платформ Ripple и Bitcoin",
+                                                "description": "Принципиальные отличия платформ Ripple и Bitcoin Ripple — цифровой актив и платежный протокол, позволяющий осуществлять международные платежи без посредников. Разработкой криптовалюты занимается компания Ripple Labs, которая также создала токен XRP. Данная пл…",
+                                                "image": "https://www.computerra.ru/wp-content/uploads/2022/02/pasted-image-0.png",
+                                                "content": "Ripple , . Ripple Labs, XRP. , . , , Bitcoin.\r\n XRP BTC\r\n , . XRP, OneCoin, . , , .\r\n 100 , 39 . 1 . , 5 . XRP , , .\r\n , . , :\r\n Ripple , , , .\r\n  https://changelly.com/ru/exchange/xrp/btc  , . , . C… [+157 chars]",
+                                                "published": "2022-02-09",
+                                                "source": "Computerra.ru"
+                                            },
+                                            {
+                                                "id": 4,
+                                                "title": "Гарик Харламов раскрыл отношение к Comedy Club",
+                                                "description": "Юморист Гарик Харламов раскрыл свое отношение к шоу Comedy Club. «Я все-таки решил для себя, что хочу увидеть, когда он [проект] закончится. Когда мы начинали, я был уверен, что это два года максимум. Два-три года мы будем. Но нет, в следующем году 20 лет Com…",
+                                                "image": "https://icdn.lenta.ru/images/2022/01/31/13/20220131132505308/share_45272bd1842b11dd1befc12209969d58.jpg",
+                                                "content": "Comedy Club. YouTube- DASH , .\r\n , , . « , : \", Comedy Club\", (...) . Comedy Club », .\r\n« - , , [] . , , . - . , 20 Comedy Club. , - », . , .\r\n, . « , , , . », . , . , .",
+                                                "published": "2022-01-31",
+                                                "source": "Lenta"
+                                            },
+                                            {
+                                                "id": 5,
+                                                "title": "Описана нелегальная схема обмена биткоинов на рубли",
+                                                "description": "«Известия» нашли 26 обменников, в которых можно за биткоины получить рубли. Пункты работают не только в Москве, но и в других крупных городах страны. Около 20 компаний допускают выдачу живых денег за Ethereum. Чтобы обменять криптовалюту, нужно создать заявку…",
+                                                "image": "https://icdn.lenta.ru/images/2022/02/10/11/20220210112107688/share_a91bdec62a0771f7fd7e0d24827d23fe.jpg",
+                                                "content": "«» 26 , . , , .\r\n 20 Ethereum. , 80 , . 50 .\r\n , , , . , . , , Telegram- « ».\r\n , , . . , , , . .\r\n, .",
+                                                "published": "2022-02-10",
+                                                "source": "Lenta"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "News"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "title",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "description",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "image",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "content",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "published",
+                        "type": "string",
+                        "required": true,
+                        "description": "date format  Y-m-d"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "source",
+                        "type": "string",
+                        "required": false,
+                        "description": "source  ex. Computerra.ru"
+                    }
+                ],
+                "summary": "Add news",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "News created successfully"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/news/{id}": {
+            "get": {
+                "tags": [
+                    "News"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "summary": "Get one news",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "description": {
+                                                "type": "string"
+                                            },
+                                            "image": {
+                                                "type": "string"
+                                            },
+                                            "content": {
+                                                "type": "string"
+                                            },
+                                            "published": {
+                                                "type": "string"
+                                            },
+                                            "source": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "example": {
+                                            "id": 1,
+                                            "title": "Принципиальные отличия платформ Ripple и Bitcoin",
+                                            "description": "Принципиальные отличия платформ Ripple и Bitcoin Ripple — цифровой актив и платежный протокол, позволяющий осуществлять международные платежи без посредников. Разработкой криптовалюты занимается компания Ripple Labs, которая также создала токен XRP. Данная пл…",
+                                            "image": "https://www.computerra.ru/wp-content/uploads/2022/02/pasted-image-0.png",
+                                            "content": "Ripple , . Ripple Labs, XRP. , . , , Bitcoin.\r\n XRP BTC\r\n , . XRP, OneCoin, . , , .\r\n 100 , 39 . 1 . , 5 . XRP , , .\r\n , . , :\r\n Ripple , , , .\r\n  https://changelly.com/ru/exchange/xrp/btc  , . , . C… [+157 chars]",
+                                            "published": "2022-02-09",
+                                            "source": "Computerra.ru"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "News"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "title",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "description",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "image",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "content",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "published",
+                        "type": "string",
+                        "required": false,
+                        "description": "date format  Y-m-d"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "source",
+                        "type": "string",
+                        "required": false,
+                        "description": "source  ex. Computerra.ru"
+                    }
+                ],
+                "summary": "Update News",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "News updated successfully"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "News"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "title",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "description",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "image",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "content",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "published",
+                        "type": "string",
+                        "required": false,
+                        "description": "date format  Y-m-d"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "source",
+                        "type": "string",
+                        "required": false,
+                        "description": "source  ex. Computerra.ru"
+                    }
+                ],
+                "summary": "Update News",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "News updated successfully"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "News"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "summary": "Delete news",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "Deleted",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Success"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "News deleted successfully"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
