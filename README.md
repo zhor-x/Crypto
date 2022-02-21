@@ -3,7 +3,7 @@
 ## Installation
 ```sh
 
-git clone https://github.com/xazaroff1/Crypto.git
+git clone https://github.com/zhor-x/Crypto.git
 cd Crypto
 for *nix
 make build-mytest
