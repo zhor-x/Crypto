@@ -8,8 +8,8 @@ cd Crypto
 for *nix
 make build-mytest
 for windows 
-open linux subsystem
-make build-mytest
+open linux subsystem terminal
+make build-mytest 
 ```
 ## Used
 ```sh
